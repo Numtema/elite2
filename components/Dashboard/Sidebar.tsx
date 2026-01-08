@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { 
-  LayoutDashboard, ListTodo, Flag, Box, AlertTriangle, BarChart3, FileText, Sparkles, ChevronRight, LogOut 
+  LayoutDashboard, ListTodo, Flag, Box, AlertTriangle, BarChart3, FileText, Sparkles, ChevronRight, LogOut, Database 
 } from 'lucide-react';
 import { Logo } from '../Logo';
 
@@ -21,6 +21,7 @@ const iconMap: Record<string, React.ReactNode> = {
   kpis: <BarChart3 size={20} />,
   docs: <FileText size={20} />,
   'ai-builder': <Sparkles size={20} />,
+  'data-architect': <Database size={20} />,
 };
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, onLogout }) => {
@@ -33,22 +34,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, onLog
     { id: 'kpis', label: "KPIs" },
     { id: 'docs', label: "Docs" },
     { id: 'ai-builder', label: "AI Builder" },
+    { id: 'data-architect', label: "Data Architect" },
   ];
 
   return (
-    <aside className="w-[280px] h-full flex flex-col bg-[#0B0B0F] border-r border-white/5 pt-safe">
+    <aside className="w-[280px] h-full flex flex-col bg-[#0B0B0F] border-r border-white/5 pt-safe shrink-0">
       <div className="p-8">
         <Logo />
       </div>
 
-      <nav className="flex-1 px-4 mt-4 space-y-2">
+      <nav className="flex-1 px-4 mt-4 space-y-2 overflow-y-auto custom-scrollbar">
         {menuItems.map((item) => (
           <button
             key={item.id}
             onClick={() => setActiveTab(item.id)}
             className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group relative overflow-hidden ${
               activeTab === item.id 
-                ? 'bg-green-600 text-white' 
+                ? 'bg-green-600 text-white shadow-lg shadow-green-600/20' 
                 : 'text-slate-500 hover:bg-white/5 hover:text-green-500'
             }`}
           >
@@ -59,7 +61,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, onLog
             {activeTab === item.id && <ChevronRight size={14} className="relative z-10" />}
             
             {activeTab === item.id && (
-              <motion.div layoutId="active-nav" className="absolute inset-0 bg-green-500 -z-0 shadow-lg shadow-green-500/30" />
+              <motion.div layoutId="active-nav" className="absolute inset-0 bg-green-500 -z-0" />
             )}
           </button>
         ))}

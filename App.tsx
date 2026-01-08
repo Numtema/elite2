@@ -7,6 +7,7 @@ import {
 import { Sidebar } from './components/Dashboard/Sidebar';
 import { Overview } from './components/Dashboard/Overview';
 import { AiBuilder } from './components/Dashboard/AiBuilder';
+import { DataArchitect } from './components/Dashboard/DataArchitect';
 import { AiChatbot } from './components/Dashboard/AiChatbot';
 import { Backlog, Risks } from './components/Dashboard/ProjectModules';
 import { MilestonesView, DeliverablesView, KPIsView, DocsView } from './components/Dashboard/ProjectViews';
@@ -15,7 +16,6 @@ import { ProjectService } from './services/projectService';
 import { ProjectDashboardConfig, Target as TargetType } from './types';
 import { Logo } from './components/Logo';
 
-// Fix: Added missing fadeInUp animation variants
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
@@ -166,7 +166,6 @@ export default function App() {
 
   const DashboardLayout = () => (
     <div className="flex h-dvh bg-[#07070D] overflow-hidden pl-safe pr-safe">
-      {/* Sidebar Overlay for Mobile */}
       <AnimatePresence>
         {isSidebarOpen && (
           <motion.div 
@@ -217,6 +216,7 @@ export default function App() {
               {activeTab === 'kpis' && <KPIsView config={currentConfig} />}
               {activeTab === 'docs' && <DocsView config={currentConfig} />}
               {activeTab === 'ai-builder' && <AiBuilder onConfigGenerated={handleConfigGenerated} />}
+              {activeTab === 'data-architect' && <DataArchitect />}
             </motion.div>
           </AnimatePresence>
         </main>

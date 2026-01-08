@@ -60,6 +60,23 @@ export const GeminiInfrastructure = {
     return { ...base, ...generated };
   },
 
+  async generateDataLayer(brief: string): Promise<string> {
+    const systemPrompt = `Tu es DataBuilderAgent, un agent senior data + backend.
+    Objectif : concevoir et générer un service data complet basé sur PostgreSQL (Schéma DDL, Migrations, Seeds, Requêtes Analytics, Contrat API).
+    Règles : PostgreSQL (UUID, JSONB, Timestamptz), Multi-tenant (tenant_id), RBAC, Sécurité RGPD.
+    Output : Markdown structuré avec sections (Summary, Model, SQL DDL, Migrations, Seeds, Analytics Queries, API Contract).`;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-3-pro-preview",
+      contents: `Génère le document Markdown complet pour ce brief SaaS : ${brief}`,
+      config: {
+        systemInstruction: systemPrompt,
+      }
+    });
+
+    return response.text || "Erreur de génération du schéma de données.";
+  },
+
   async chat(message: string, history: any[]): Promise<string> {
     const chat = ai.chats.create({
       model: "gemini-3-flash-preview",
