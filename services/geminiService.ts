@@ -1,17 +1,15 @@
-
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenAI, Type, Modality } from "@google/genai";
 import { ProjectDashboardConfig } from "../types";
 import { CONFIG_PRESETS } from "../config";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Note: GoogleGenAI is instantiated per-call to ensure usage of the most current API key and state.
 
 export const GeminiInfrastructure = {
   async generateConfig(brief: string): Promise<ProjectDashboardConfig> {
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
-      contents: `Tu es un "Project Dashboard AI Builder". 
-      Génère un objet JSON COMPLET pour un dashboard de projet. 
-      Brief: ${brief}`,
+      contents: { parts: [{ text: `Tu es un "Project Dashboard AI Builder". Génère un objet JSON COMPLET pour un dashboard de projet. Brief: ${brief}` }] },
       config: {
         responseMimeType: "application/json",
         responseSchema: {
@@ -60,31 +58,68 @@ export const GeminiInfrastructure = {
     return { ...base, ...generated };
   },
 
+  async generateMarketingImage(prompt: string): Promise<string> {
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash-image',
+      contents: { parts: [{ text: `Luxurious SaaS high-tech visual for: ${prompt}. Cinematic lighting, emerald green and midnight blue palette, professional, 4k.` }] },
+      config: { imageConfig: { aspectRatio: "16:9" } }
+    });
+    // Iterate to find the image part as recommended
+    const part = response.candidates?.[0]?.content?.parts.find(p => p.inlineData);
+    return part ? `data:image/png;base64,${part.inlineData.data}` : "";
+  },
+
+  async generateVideoDemo(prompt: string): Promise<string> {
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    let operation = await ai.models.generateVideos({
+      model: 'veo-3.1-fast-generate-preview',
+      prompt: `Premium SaaS dashboard demo animation showing growth and AI features for: ${prompt}. Midnight blue and green emerald aesthetic.`,
+      config: { numberOfVideos: 1, resolution: '720p', aspectRatio: '16:9' }
+    });
+    while (!operation.done) {
+      await new Promise(resolve => setTimeout(resolve, 5000));
+      operation = await ai.operations.getVideosOperation({ operation });
+    }
+    const downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri;
+    return downloadLink ? `${downloadLink}&key=${process.env.API_KEY}` : "";
+  },
+
   async generateDataLayer(brief: string): Promise<string> {
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const systemPrompt = `Tu es DataBuilderAgent, un agent senior data + backend.
-    Objectif : concevoir et générer un service data complet basé sur PostgreSQL (Schéma DDL, Migrations, Seeds, Requêtes Analytics, Contrat API).
-    Règles : PostgreSQL (UUID, JSONB, Timestamptz), Multi-tenant (tenant_id), RBAC, Sécurité RGPD.
     Output : Markdown structuré avec sections (Summary, Model, SQL DDL, Migrations, Seeds, Analytics Queries, API Contract).`;
 
     const response = await ai.models.generateContent({
       model: "gemini-3-pro-preview",
-      contents: `Génère le document Markdown complet pour ce brief SaaS : ${brief}`,
-      config: {
-        systemInstruction: systemPrompt,
-      }
+      contents: { parts: [{ text: `Génère le document Markdown complet pour ce brief SaaS : ${brief}` }] },
+      config: { systemInstruction: systemPrompt }
     });
-
-    return response.text || "Erreur de génération du schéma de données.";
+    return response.text || "Erreur de génération.";
   },
 
   async chat(message: string, history: any[]): Promise<string> {
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const chat = ai.chats.create({
       model: "gemini-3-flash-preview",
       config: {
-        systemInstruction: "Tu es 'Elite Assistant', un expert en management de projet et IA. Tu aides l'utilisateur à structurer ses idées, définir ses KPIs et gérer ses risques. Ton ton est professionnel, précis et encourageant.",
+        systemInstruction: "Tu es 'Elite Assistant', un expert en management de projet et IA.",
       }
     });
     const response = await chat.sendMessage({ message });
-    return response.text || "Désolé, je n'ai pas pu traiter votre demande.";
+    return response.text || "Erreur.";
+  },
+
+  connectLive(callbacks: any) {
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    return ai.live.connect({
+      model: 'gemini-2.5-flash-native-audio-preview-12-2025',
+      callbacks,
+      config: {
+        responseModalities: [Modality.AUDIO],
+        speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Zephyr' } } },
+        systemInstruction: "Tu es un Business Strategist de haut niveau. Tu aides à concevoir des SaaS. Ton ton est calme, intelligent et visionnaire. Tu parles uniquement par voix."
+      }
+    });
   }
 };

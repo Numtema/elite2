@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { 
-  LayoutDashboard, ListTodo, Flag, Box, AlertTriangle, BarChart3, FileText, Sparkles, ChevronRight, LogOut, Database 
+  LayoutDashboard, ListTodo, Flag, Box, AlertTriangle, BarChart3, FileText, Sparkles, ChevronRight, LogOut, Database, Image, Mic 
 } from 'lucide-react';
 import { Logo } from '../Logo';
 
@@ -22,19 +22,20 @@ const iconMap: Record<string, React.ReactNode> = {
   docs: <FileText size={20} />,
   'ai-builder': <Sparkles size={20} />,
   'data-architect': <Database size={20} />,
+  'media-lab': <Image size={20} />,
+  'strategy-hub': <Mic size={20} />,
 };
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, onLogout }) => {
   const menuItems = [
     { id: 'overview', label: "Vue d'ensemble" },
     { id: 'backlog', label: "Backlog" },
-    { id: 'milestones', label: "Jalons" },
-    { id: 'deliverables', label: "Livrables" },
-    { id: 'risks', label: "Risques" },
-    { id: 'kpis', label: "KPIs" },
-    { id: 'docs', label: "Docs" },
     { id: 'ai-builder', label: "AI Builder" },
     { id: 'data-architect', label: "Data Architect" },
+    { id: 'media-lab', label: "Media Lab" },
+    { id: 'strategy-hub', label: "Strategy Hub" },
+    { id: 'kpis', label: "KPIs" },
+    { id: 'docs', label: "Docs" },
   ];
 
   return (
