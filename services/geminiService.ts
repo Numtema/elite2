@@ -10,9 +10,8 @@ export const GeminiInfrastructure = {
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: `Tu es un "Project Dashboard AI Builder". 
-      IMPORTANT: Tu DOIS générer un objet JSON COMPLET suivant strictement le schéma fourni. 
-      Même si le brief est court, invente des données réalistes pour remplir TOUTES les sections (overview, backlog, milestones, deliverables, risks, kpis, docs).
-      Brief utilisateur: ${brief}`,
+      Génère un objet JSON COMPLET pour un dashboard de projet. 
+      Brief: ${brief}`,
       config: {
         responseMimeType: "application/json",
         responseSchema: {
@@ -46,55 +45,29 @@ export const GeminiInfrastructure = {
                 weeklyGoal: { type: Type.OBJECT, properties: { percent: { type: Type.NUMBER }, title: { type: Type.STRING }, subtitle: { type: Type.STRING } } }
               }
             },
-            backlog: {
-              type: Type.OBJECT,
-              properties: {
-                items: { type: Type.ARRAY, items: { type: Type.OBJECT, properties: { id: { type: Type.STRING }, title: { type: Type.STRING }, priority: { type: Type.STRING }, status: { type: Type.STRING }, owner: { type: Type.STRING }, dueDate: { type: Type.STRING } } } }
-              }
-            },
-            milestones: {
-              type: Type.OBJECT,
-              properties: {
-                items: { type: Type.ARRAY, items: { type: Type.OBJECT, properties: { id: { type: Type.STRING }, title: { type: Type.STRING }, date: { type: Type.STRING }, status: { type: Type.STRING }, notes: { type: Type.STRING } } } }
-              }
-            },
-            deliverables: {
-              type: Type.OBJECT,
-              properties: {
-                items: { type: Type.ARRAY, items: { type: Type.OBJECT, properties: { id: { type: Type.STRING }, title: { type: Type.STRING }, status: { type: Type.STRING }, validator: { type: Type.STRING }, dueDate: { type: Type.STRING } } } }
-              }
-            },
-            risks: {
-              type: Type.OBJECT,
-              properties: {
-                items: { type: Type.ARRAY, items: { type: Type.OBJECT, properties: { id: { type: Type.STRING }, risk: { type: Type.STRING }, severity: { type: Type.STRING }, probability: { type: Type.STRING }, mitigation: { type: Type.STRING }, owner: { type: Type.STRING }, status: { type: Type.STRING } } } }
-              }
-            },
-            docs: {
-              type: Type.OBJECT,
-              properties: {
-                decisionLog: { type: Type.ARRAY, items: { type: Type.OBJECT, properties: { id: { type: Type.STRING }, date: { type: Type.STRING }, decision: { type: Type.STRING }, impact: { type: Type.STRING } } } }
-              }
-            }
+            backlog: { type: Type.OBJECT, properties: { items: { type: Type.ARRAY, items: { type: Type.OBJECT, properties: { id: { type: Type.STRING }, title: { type: Type.STRING }, priority: { type: Type.STRING }, status: { type: Type.STRING }, owner: { type: Type.STRING }, dueDate: { type: Type.STRING } } } } } },
+            milestones: { type: Type.OBJECT, properties: { items: { type: Type.ARRAY, items: { type: Type.OBJECT, properties: { id: { type: Type.STRING }, title: { type: Type.STRING }, date: { type: Type.STRING }, status: { type: Type.STRING }, notes: { type: Type.STRING } } } } } },
+            deliverables: { type: Type.OBJECT, properties: { items: { type: Type.ARRAY, items: { type: Type.OBJECT, properties: { id: { type: Type.STRING }, title: { type: Type.STRING }, status: { type: Type.STRING }, validator: { type: Type.STRING }, dueDate: { type: Type.STRING } } } } } },
+            risks: { type: Type.OBJECT, properties: { items: { type: Type.ARRAY, items: { type: Type.OBJECT, properties: { id: { type: Type.STRING }, risk: { type: Type.STRING }, severity: { type: Type.STRING }, probability: { type: Type.STRING }, mitigation: { type: Type.STRING }, owner: { type: Type.STRING }, status: { type: Type.STRING } } } } } },
+            docs: { type: Type.OBJECT, properties: { decisionLog: { type: Type.ARRAY, items: { type: Type.OBJECT, properties: { id: { type: Type.STRING }, date: { type: Type.STRING }, decision: { type: Type.STRING }, impact: { type: Type.STRING } } } } } }
           }
         }
       }
     });
 
     const generated = JSON.parse(response.text || "{}");
-    
-    // Fusionner avec un preset par défaut pour garantir que tous les champs existent
     const base = CONFIG_PRESETS.people;
-    return {
-      ...base,
-      ...generated,
-      project: { ...base.project, ...generated.project },
-      overview: { ...base.overview, ...generated.overview },
-      backlog: { ...base.backlog, ...generated.backlog },
-      milestones: { ...base.milestones, ...generated.milestones },
-      deliverables: { ...base.deliverables, ...generated.deliverables },
-      risks: { ...base.risks, ...generated.risks },
-      docs: { ...base.docs, ...generated.docs },
-    };
+    return { ...base, ...generated };
+  },
+
+  async chat(message: string, history: any[]): Promise<string> {
+    const chat = ai.chats.create({
+      model: "gemini-3-flash-preview",
+      config: {
+        systemInstruction: "Tu es 'Elite Assistant', un expert en management de projet et IA. Tu aides l'utilisateur à structurer ses idées, définir ses KPIs et gérer ses risques. Ton ton est professionnel, précis et encourageant.",
+      }
+    });
+    const response = await chat.sendMessage({ message });
+    return response.text || "Désolé, je n'ai pas pu traiter votre demande.";
   }
 };
