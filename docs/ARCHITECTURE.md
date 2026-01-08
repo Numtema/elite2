@@ -1,16 +1,24 @@
+
 # Architecture Générale
 
 ## Pattern
-Driven by Configuration (ProjectDashboardConfig).
+Service Layer Architecture + Configuration Driven UI
 
-## Arborescence du code
-- `App.tsx` : Orchestrateur de vues (Landing, Auth, Dashboard).
-- `config.ts` : Presets par défaut (People, Business, University, Government).
-- `types.ts` : Définition stricte des types de données.
-- `services/` : Intégration API (Gemini).
-- `components/` : UI atomique et modules de dashboard.
+## Layers
+1. **Presentation Layer**
+   - App.tsx (Main orchestrator)
+   - components/ (UI, modules)
+   - hooks/ (UI Logic)
 
-## Flux de données
-1. User Input (Brief) → `geminiService`
-2. `geminiService` → Validated JSON Config
-3. App State Update → Re-render Dashboard components via `currentConfig` props.
+2. **Application Layer**
+   - services/projectService.ts (Orchestrates domain logic)
+
+3. **Domain Layer**
+   - types.ts (Pure entities and interfaces)
+   - config.ts (Static presets)
+
+4. **Infrastructure Layer**
+   - services/geminiService.ts (External AI API)
+
+## Flux type
+UI Action → ProjectService → GeminiService → Gemini API → UI Update

@@ -1,21 +1,26 @@
+
 # AGENTS – Règles Globales
 
-Ces documents définissent les règles obligatoires pour tout humain ou agent IA intervenant sur ce projet "Elite Training".
+Ces documents définissent les règles obligatoires pour tout humain ou agent IA
+intervenant sur ce projet.
 
 ## Stack cible
-- React / TypeScript (ESM)
-- Tailwind CSS
-- Lucide React (Icons)
-- Framer Motion (Animations)
-- Gemini AI (Configuration Generation)
+- Next.js (Conceptuel) / React ESM
+- Bun (Runtime recommandé)
+- TypeScript strict
+- Service Layer Architecture
+- Design System centralisé (Elite Theme)
+- Mobile-first
 
 ## Principes non négociables
-- **Esthétique "Elite"** : Midnight Blue (#07070D) et Emerald Green (#22c55e).
-- **Architecture de Configuration** : L'application est pilotée par le `ProjectDashboardConfig`.
-- **Zéro "Magic Numbers"** : Utilisation stricte des classes Tailwind.
-- **Accessibilité** : Attributs ARIA et navigation clavier.
+- Séparation stricte des responsabilités (UI ≠ Business Logic)
+- Aucun contournement de layer (Infrastructure → Service → Presentation)
+- Aucun composant sans règles UX "Elite"
+- Aucun écran sans accessibilité minimale (WCAG AA)
+- Aucun “magic number” sans token Tailwind
 
 ## Définition de DONE
-- Responsive (Mobile-first).
-- États gérés (Loading / Empty / Error).
-- Documentation mise à jour.
+- Fonctionnel mobile / tablet / desktop
+- Accessible clavier
+- États gérés (loading / empty / error)
+- Documentation mise à jour

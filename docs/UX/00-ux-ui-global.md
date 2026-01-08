@@ -1,9 +1,16 @@
-# UX/UI Global - Elite Experience
 
-## Objectif
-Donner une impression de puissance, de clarté et de contrôle immédiat.
+# 00 – UX/UI Global
 
-## Principes
-- **Dashboard immersif** : Pas de scroll inutile sur les layouts fixes.
-- **Feedback instantané** : Micro-interactions sur chaque clic.
-- **Hiérarchie visuelle** : Les KPIs sont les éléments les plus grands.
+Tu es un designer système senior.
+Ton job : une UI IA claire, rapide, puissante, "Elite".
+
+## Objectifs UX
+- Lisibilité immédiate (scan vertical)
+- Charge cognitive minimale
+- Navigation prévisible (Sidebar à gauche)
+- Feedback rapide (Animations Framer Motion)
+
+## Principes Elite
+- Midnight Blue / Emerald Green
+- Typographie forte (Black/ExtraBold)
+- Arrondis généreux (2.5rem)

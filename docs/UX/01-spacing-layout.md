@@ -1,5 +1,7 @@
-# Spacing & Layout
 
-- **Sidebar** : Largeur fixe `w-72`.
-- **Main Content** : Flexible avec padding `p-10`.
-- **Gap** : Utiliser `gap-6` ou `gap-8` pour les grilles de cartes.
+# 01 – Spacing & Layout
+
+- **Base unit** = 8px (Tailwind `w-2` = 8px)
+- **Cards Padding** : `p-8` ou `p-10`
+- **Gaps** : `gap-6` (24px) pour les grilles
+- **Sidebar** : `w-72` fixe sur desktop

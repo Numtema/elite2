@@ -1,20 +1,16 @@
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { 
   Search, 
   Bell, 
   Plus, 
-  ArrowRight,
-  ShieldCheck,
-  Zap,
-  LayoutDashboard,
-  Menu,
-  X,
-  Star,
-  Globe,
-  Users,
-  Building
+  ArrowRight, 
+  Zap, 
+  Users, 
+  Building, 
+  Star, 
+  Globe 
 } from 'lucide-react';
 import { Sidebar } from './components/Dashboard/Sidebar';
 import { Overview } from './components/Dashboard/Overview';
@@ -22,36 +18,40 @@ import { AiBuilder } from './components/Dashboard/AiBuilder';
 import { Backlog, Risks } from './components/Dashboard/ProjectModules';
 import { MilestonesView, DeliverablesView, KPIsView, DocsView } from './components/Dashboard/ProjectViews';
 import { Auth } from './components/Auth/Auth';
-import { CONFIG_PRESETS } from './config';
+import { ProjectService } from './services/projectService';
 import { ProjectDashboardConfig, Target } from './types';
 import { Logo } from './components/Logo';
 
 export default function App() {
-  const [view, setView] = useState<'landing' | 'login' | 'register' | 'dashboard'>('landing');
+  const [view, setView] = useState<'landing' | 'auth' | 'dashboard'>('landing');
   const [activeTab, setActiveTab] = useState('overview');
-  const [currentConfig, setCurrentConfig] = useState<ProjectDashboardConfig>(CONFIG_PRESETS.people);
+  const [currentConfig, setCurrentConfig] = useState<ProjectDashboardConfig>(() => {
+    return ProjectService.loadFromLocalStorage() || ProjectService.getPreset('people');
+  });
 
   const handleConfigGenerated = (config: ProjectDashboardConfig) => {
     setCurrentConfig(config);
+    ProjectService.saveToLocalStorage(config);
     setActiveTab('overview');
   };
 
   const changePreset = (target: Target) => {
-    setCurrentConfig(CONFIG_PRESETS[target]);
+    const config = ProjectService.getPreset(target);
+    setCurrentConfig(config);
+    ProjectService.saveToLocalStorage(config);
     setActiveTab('overview');
   };
 
   const LandingPage = () => (
-    <div className="min-h-screen relative overflow-hidden bg-[#07070D] flex flex-col">
+    <div className="min-h-screen relative overflow-hidden bg-[#07070D] flex flex-col font-['Poppins']">
       <div className="absolute inset-0 hero-grid pointer-events-none opacity-30" />
       
       <nav className="h-24 px-10 flex items-center justify-between z-50">
         <Logo />
         <div className="hidden md:flex items-center gap-10">
-          <a href="#" className="text-sm font-bold text-slate-400 hover:text-white uppercase tracking-widest transition-colors">Fonctionnalités</a>
-          <a href="#" className="text-sm font-bold text-slate-400 hover:text-white uppercase tracking-widest transition-colors">Presets</a>
-          <a href="#" className="text-sm font-bold text-slate-400 hover:text-white uppercase tracking-widest transition-colors">Tarifs</a>
-          <button onClick={() => setView('login')} className="px-8 py-3 glass-dark border border-white/10 rounded-xl text-sm font-black text-white uppercase tracking-widest hover:border-green-500/40 transition-all">Connexion</button>
+          <button onClick={() => setView('auth')} className="px-8 py-3 bg-white/5 border border-white/10 rounded-xl text-sm font-black text-white uppercase tracking-widest hover:border-green-500/40 transition-all">
+            Connexion
+          </button>
         </div>
       </nav>
 
@@ -62,43 +62,38 @@ export default function App() {
           className="max-w-5xl"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1 bg-green-500/10 border border-green-500/20 rounded-full text-green-500 text-[10px] font-black uppercase tracking-widest mb-8">
-            <Zap size={12} /> Le futur du Management de Projet
+            <Zap size={12} /> Excellence en Management de Projet
           </div>
-          <h1 className="text-7xl md:text-9xl font-black tracking-tighter leading-[0.85] mb-8 text-white uppercase">
-            Générez votre <br /> 
-            <span className="text-green-500">Elite Dashboard</span>
+          <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.85] mb-8 text-white uppercase">
+            Bâtissez votre <br /> 
+            <span className="text-green-500 text-shadow-glow">Elite Master</span>
           </h1>
           <p className="text-xl md:text-2xl text-slate-400 font-medium max-w-3xl mx-auto mb-14 leading-relaxed">
-            Elite Training & Project : l'outil ultime piloté par l'IA pour bâtir des landing pages, des formations et des workflows complexes en quelques secondes.
+            Propulsez vos landing pages et formations avec notre dashboard piloté par l'IA. 
+            Précision chirurgicale. Performance maximale.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             <button 
-              onClick={() => setView('register')} 
+              onClick={() => setView('auth')} 
               className="px-12 py-6 bg-green-500 text-white rounded-[2rem] font-black text-xl shadow-2xl shadow-green-500/30 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-4 group"
             >
-              Démarrer le projet <ArrowRight className="group-hover:translate-x-2 transition-transform" />
+              Démarrer l'aventure <ArrowRight className="group-hover:translate-x-2 transition-transform" />
             </button>
-            <div className="flex items-center -space-x-4">
-              {[1, 2, 3, 4].map(i => (
-                <div key={i} className="w-12 h-12 rounded-full border-2 border-[#07070D] bg-slate-800" />
-              ))}
-              <span className="pl-6 text-sm font-bold text-slate-500">+12k Users Elite</span>
-            </div>
           </div>
         </motion.div>
 
         <div className="mt-32 w-full max-w-6xl grid grid-cols-2 lg:grid-cols-4 gap-6 px-4">
           {[
             { id: 'people', icon: <Users />, label: 'Indépendants', desc: 'Landing Pages B2C' },
-            { id: 'business', icon: <Building />, label: 'Entreprises', desc: 'Solutions SaaS & ROI' },
+            { id: 'business', icon: <Building />, label: 'Entreprises', desc: 'Solutions SaaS ROI' },
             { id: 'university', icon: <Star />, label: 'Académique', desc: 'LMS & Formation' },
-            { id: 'government', icon: <Globe />, label: 'Gouvernement', desc: 'Conformité & RGPD' }
+            { id: 'government', icon: <Globe />, label: 'Gouvernement', desc: 'Compliance & RGPD' }
           ].map((cat) => (
             <div 
               key={cat.id} 
-              onClick={() => { changePreset(cat.id as Target); setView('dashboard'); }}
-              className="bg-[#12121A] border border-white/5 p-8 rounded-[2rem] text-left hover:border-green-500/30 transition-all cursor-pointer group"
+              onClick={() => { changePreset(cat.id as Target); setView('auth'); }}
+              className="bg-[#12121A] border border-white/5 p-8 rounded-[2.5rem] text-left hover:border-green-500/30 transition-all cursor-pointer group"
             >
               <div className="w-12 h-12 bg-green-500/10 text-green-500 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 {cat.icon}
@@ -110,13 +105,13 @@ export default function App() {
         </div>
       </div>
 
-      <div className="mt-40 w-full overflow-hidden py-10 border-y border-white/5 bg-white/5">
+      <div className="mt-40 w-full overflow-hidden py-8 border-y border-white/5 bg-white/5">
         <div className="animate-marquee whitespace-nowrap flex items-center">
           {[...Array(10)].map((_, i) => (
             <div key={i} className="flex items-center mx-12 gap-4">
               <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_#22c55e]" />
               <span className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-500">
-                AI Powered Dashboards • Elite Training • Excellence Workflow
+                AI Driven Dashboards • Elite Mastery • Precision Workflow
               </span>
             </div>
           ))}
@@ -126,7 +121,7 @@ export default function App() {
   );
 
   const DashboardLayout = () => (
-    <div className="flex min-h-screen bg-[#07070D] font-['Poppins']">
+    <div className="flex min-h-screen bg-[#07070D] font-['Poppins'] text-slate-100 selection:bg-green-500 selection:text-white">
       <Sidebar 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
@@ -159,9 +154,6 @@ export default function App() {
                ))}
             </div>
 
-            <button className="p-3 rounded-xl hover:bg-white/10 transition-colors text-slate-400">
-              <Plus size={20} />
-            </button>
             <button className="relative text-slate-400 hover:text-green-500 transition-colors">
               <Bell size={22} />
               <span className="absolute top-0 right-0 w-2 h-2 bg-green-500 rounded-full border-2 border-[#12121A]" />
@@ -204,17 +196,10 @@ export default function App() {
   );
 
   return (
-    <div className={`min-h-screen bg-[#07070D] text-slate-100 selection:bg-green-500 selection:text-white`}>
+    <div className="min-h-screen bg-[#07070D]">
       <AnimatePresence mode="wait">
         {view === 'landing' && <LandingPage key="landing" />}
-        {(view === 'login' || view === 'register') && (
-          <Auth 
-            key="auth" 
-            type={view} 
-            onSuccess={() => setView('dashboard')} 
-            onToggle={() => setView(view === 'login' ? 'register' : 'login')} 
-          />
-        )}
+        {view === 'auth' && <Auth key="auth" onSuccess={() => setView('dashboard')} />}
         {view === 'dashboard' && <DashboardLayout key="dashboard" />}
       </AnimatePresence>
     </div>

@@ -1,5 +1,6 @@
-# Interactions & Motion
 
-- **Page Transitions** : `AnimatePresence` avec `opacity` et `x` offset.
-- **Hover** : Scale subtil (`1.02`) sur les cartes.
-- **Loading** : Spinner `animate-spin` vert fluide.
+# 05 – Interactions & Motion
+
+- **Page Transitions** : Slide-fade via Framer Motion
+- **Hover cards** : Scale subtil et border color change
+- **Durée** : 300ms max

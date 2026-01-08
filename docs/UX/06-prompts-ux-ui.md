@@ -1,4 +1,4 @@
-# Prompts pour Agents UX
 
-Pour toute modification d'interface :
-"Agis en tant que UI/UX designer senior. Respecte le style Midnight Blue/Emerald Green. Utilise des arrondis larges (2.5rem), une typographie Poppins extra-bold pour les titres, et assure-toi que le contraste est conforme WCAG AA."
+# 06 – Prompts UX/UI
+
+"Conçois une interface Elite : fond midnight blue, accents vert émeraude, typographie Poppins extra-bold, arrondis 2.5rem, cards spacieuses avec padding p-10."

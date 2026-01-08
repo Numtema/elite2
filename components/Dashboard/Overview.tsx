@@ -25,7 +25,13 @@ const TrendIcon = ({ trend }: { trend: Trend }) => {
 };
 
 export const Overview: React.FC<OverviewProps> = ({ config }) => {
-  const { overview, project } = config;
+  // Sécurité: fallback si config ou overview est undefined
+  const project = config?.project || { name: 'Projet', target: 'people', startDate: '', type: '', owner: '', status: 'on_track' };
+  const overview = config?.overview || { 
+    kpiTiles: [], 
+    spotlight: { badge: 'N/A', title: 'Pas de données', subtitle: '' },
+    weeklyGoal: { percent: 0, title: 'Objectif', subtitle: '' }
+  };
 
   return (
     <div className="space-y-10">
@@ -53,7 +59,7 @@ export const Overview: React.FC<OverviewProps> = ({ config }) => {
           }`}>
             <CheckCircle2 size={16} />
             <span className="text-sm font-black uppercase tracking-widest">
-              {project.status.replace('_', ' ')}
+              {project.status?.replace('_', ' ')}
             </span>
           </div>
         </div>
@@ -61,7 +67,7 @@ export const Overview: React.FC<OverviewProps> = ({ config }) => {
 
       {/* KPI Tiles */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {overview.kpiTiles.map((tile, i) => (
+        {overview.kpiTiles?.map((tile, i) => (
           <motion.div
             key={i}
             initial={{ opacity: 0, y: 20 }}
@@ -92,13 +98,13 @@ export const Overview: React.FC<OverviewProps> = ({ config }) => {
         <div className="lg:col-span-2 bg-slate-900 dark:bg-[#12121A] rounded-[3rem] p-10 text-white relative overflow-hidden border border-white/5 shadow-xl">
           <div className="relative z-10 h-full flex flex-col justify-center">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-600 text-[10px] font-black uppercase tracking-widest mb-6 w-fit">
-              <AlertCircle size={12} /> {overview.spotlight.badge}
+              <AlertCircle size={12} /> {overview.spotlight?.badge}
             </div>
             <h2 className="text-4xl md:text-5xl font-black mb-4 tracking-tight uppercase leading-tight">
-              {overview.spotlight.title}
+              {overview.spotlight?.title}
             </h2>
             <p className="text-slate-400 font-medium mb-8 max-w-lg">
-              {overview.spotlight.subtitle}
+              {overview.spotlight?.subtitle}
             </p>
             <button className="w-fit px-10 py-5 bg-green-500 text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-green-600 transition-all shadow-xl shadow-green-500/20">
               Voir le jalon
@@ -117,20 +123,20 @@ export const Overview: React.FC<OverviewProps> = ({ config }) => {
                 cx="50" cy="50" r="42" 
                 fill="none" stroke="#22c55e" 
                 strokeWidth="8" 
-                strokeDasharray={`${overview.weeklyGoal.percent * 2.64} 264`} 
+                strokeDasharray={`${(overview.weeklyGoal?.percent || 0) * 2.64} 264`} 
                 strokeLinecap="round" 
               />
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-5xl font-black text-white">{overview.weeklyGoal.percent}%</span>
+              <span className="text-5xl font-black text-white">{overview.weeklyGoal?.percent}%</span>
               <span className="text-[10px] font-black text-green-500 uppercase tracking-widest">Atteint</span>
             </div>
           </div>
           <h4 className="text-xl font-black text-white mb-2 uppercase tracking-tight">
-            {overview.weeklyGoal.title}
+            {overview.weeklyGoal?.title}
           </h4>
           <p className="text-slate-400 text-sm font-medium leading-relaxed">
-            {overview.weeklyGoal.subtitle}
+            {overview.weeklyGoal?.subtitle}
           </p>
         </div>
       </div>

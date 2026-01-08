@@ -1,16 +1,21 @@
-# Design System "Elite"
 
-## Couleurs
-- **Background** : `#07070D` (Midnight Deep)
-- **Primary** : `#22c55e` (Emerald Green)
-- **Secondary** : `#12121A` (Card Background)
-- **Border** : `rgba(255,255,255,0.05)`
+# Design System Elite
 
-## Composants de base
-- **Cards** : `rounded-[2.5rem]`, padding 8-10, border subtil.
-- **Boutons** : `rounded-2xl`, font-black, uppercase, shadow vert pour le bouton principal.
-- **Glassmorphism** : `backdrop-blur-xl` pour les headers et modales.
+## Objectif
+Créer des composants prédictibles, luxueux, accessibles.
 
-## Spacing
-- Grille de base : 8px.
-- Sections : 40px margin minimum.
+## Unité
+- Spacing : base 8px (Tailwind units)
+- Typo : Poppins uniquement
+- Couleurs : Midnight Blue (#07070D) & Emerald Green (#22c55e)
+
+## États obligatoires
+- default / hover / focus
+- active / disabled
+- loading / error
+- empty (si liste)
+
+## Chaque composant Elite DOIT avoir
+- Props typées (TS)
+- Border radius : `rounded-[2.5rem]` ou `rounded-2xl`
+- Fond : `#12121A` pour les cartes

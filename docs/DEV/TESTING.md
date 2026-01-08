@@ -1,3 +1,4 @@
-# Tests
 
-- Vérifier le rendu des 4 presets (People, Business, University, Government) après chaque modification CSS globale.
+# Testing
+
+- Test manuel obligatoire des 4 presets après chaque modification du layout Sidebar.

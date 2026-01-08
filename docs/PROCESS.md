@@ -1,8 +1,16 @@
+
 # Processus Reproductible
 
-## Étapes standard pour une nouvelle feature
-1. **Analyse du Type** : Mettre à jour `types.ts` si la config change.
-2. **Preset Update** : Ajouter les données par défaut dans `config.ts`.
-3. **Composant UI** : Créer le module dans `components/Dashboard/`.
-4. **Integration Page** : Brancher le composant dans `App.tsx` via `activeTab`.
-5. **AI Builder Alignment** : Mettre à jour le prompt dans `geminiService.ts` pour que l'IA sache générer cette nouvelle feature.
+## Étapes standard
+1. Définir le besoin (Fonction + UX Elite)
+2. Créer une règle UX si absente dans `docs/UX/`
+3. Implémenter le composant UI dans `components/`
+4. Mettre à jour `ProjectService` pour intégrer la nouvelle logique
+5. Connecter l'UI à `App.tsx`
+6. Tester le responsive
+7. Documenter dans `docs/`
+
+## Interdits
+- Coder sans règle UX Elite (arrondis 2.5rem, midnight blue)
+- Ajouter une feature sans état d’erreur ou de chargement
+- Bypasser le service layer

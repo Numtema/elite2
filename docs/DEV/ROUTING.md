@@ -1,5 +1,5 @@
-# Routage
 
-- Pas de routeur complexe (SPA).
-- Système de switch `view` (landing, login, register, dashboard).
-- Système de switch `activeTab` pour les modules internes.
+# Routing
+
+- Basé sur l'état `view` (Landing, Login, Register, Dashboard)
+- Segments internes via `activeTab`
